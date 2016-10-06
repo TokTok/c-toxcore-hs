@@ -1,0 +1,27 @@
+language: haskell
+ghc: 7.8
+
+cache:
+  directories:
+    - $HOME/.cabal
+    - $HOME/.ghc
+
+install:
+  # Where to find libraries.
+  - export LD_LIBRARY_PATH=$HOME/.ghc/usr/lib
+  - export CPPFLAGS=-I$HOME/.ghc/usr/include
+  - export LDFLAGS=-L$HOME/.ghc/usr/lib
+  # c-sodium
+  - >
+      [ -f $HOME/.ghc/usr/lib/libsodium.a ] || {
+        git clone --depth=1 --branch=stable https://github.com/jedisct1/libsodium;
+        (cd libsodium && ./configure --prefix=$HOME/.ghc/usr && make install -j$(nproc))
+      }
+  # hs-toxcore
+  - cabal update
+  - >
+      [ -f $HOME/.cabal/bin/happy ] || cabal install happy
+  - cabal install hstox --extra-include-dirs=$HOME/.ghc/usr/include --extra-lib-dirs=$HOME/.ghc/usr/lib
+
+script:
+  - make
