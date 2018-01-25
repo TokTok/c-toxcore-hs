@@ -102,16 +102,16 @@ random_nonce :: CString -> IO ()
 random_nonce = new_nonce
 
 
-foreign export ccall random_int :: IO Word32
+foreign export ccall random_u32 :: IO Word32
 
-random_int :: IO Word32
-random_int = randomIO
+random_u32 :: IO Word32
+random_u32 = randomIO
 
 
-foreign export ccall random_64b :: IO Word64
+foreign export ccall random_u64 :: IO Word64
 
-random_64b :: IO Word64
-random_64b = randomIO
+random_u64 :: IO Word64
+random_u64 = randomIO
 
 
 foreign export ccall increment_nonce :: CString -> IO ()

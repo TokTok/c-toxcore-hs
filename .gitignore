@@ -5,7 +5,7 @@
 *_stub.h
 *.o
 *.dylib
-*.ver
+*.ld
 *.so
 *.dll
 *.dSYM

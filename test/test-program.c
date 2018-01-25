@@ -1,4 +1,10 @@
+#define INCLUDE_TOXCORE 0
+
+#if INCLUDE_TOXCORE
+#include "../../c-toxcore/toxcore/crypto_core.h"
+#else
 #include "Network/Tox/CExport/CryptoCore_stub.h"
+#endif
 
 #include <dlfcn.h>
 #include <stdint.h>
@@ -40,12 +46,12 @@ int main(void)
   SYM(decrypt_data_symmetric);
   SYM(encrypt_data_symmetric);
   SYM(encrypt_precompute);
-  SYM(random_64b);
-  SYM(random_int);
+  SYM(random_u64);
+  SYM(random_u32);
   SYM(random_nonce);
 
-  printf("%u\n", dl_random_int());
-  printf("%lu\n", dl_random_64b());
+  printf("%u\n", dl_random_u32());
+  printf("%lu\n", dl_random_u64());
 
   uint8_t pk[32] = { 0, 1, 2, 3, 4 };
   uint8_t sk[32] = { 0, 4, 3, 2, 1 };
@@ -57,10 +63,10 @@ int main(void)
 
   char plain[] = "hello world";
   char encrypted[sizeof plain + 16] = { 0 };
-  dl_encrypt_data_symmetric(ck, nonce, plain, sizeof plain, encrypted);
+  dl_encrypt_data_symmetric(ck, nonce, (uint8_t *)plain, sizeof plain, (uint8_t *)encrypted);
 
   char plain2[sizeof plain] = { 0 };
-  dl_decrypt_data_symmetric(ck, nonce, encrypted, sizeof encrypted, plain2);
+  dl_decrypt_data_symmetric(ck, nonce, (uint8_t *)encrypted, sizeof encrypted, (uint8_t *)plain2);
 
   printf("%s\n", plain2);
 

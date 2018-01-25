@@ -12,13 +12,13 @@ SYMBOLS		:= $(shell egrep -Ro 'foreign export ccall \w+' src | awk '{print $$4}'
 
 ifneq ($(shell uname),Darwin)
 LDFLAGS		:= -ldl -pthread
-DYLDFLAGS	:= -optl -Wl,--version-script,libtoxcore-hs.ver
+DYLDFLAGS	:= -optl -Wl,--version-script,libtoxcore-hs.ld
 #DYLDFLAGS	+= -optl -Wl,-z,defs
 endif
 
 ifneq ($(shell which valgrind),)
 ifneq ($(shell which gdb),)
-RUN_DEBUGGER	= valgrind ./$< || gdb -batch -ex "run" -ex "bt" ./$<
+RUN_DEBUGGER	= gdb -batch -ex "run" -ex "bt" ./$< || valgrind ./$<
 endif
 endif
 
@@ -32,7 +32,7 @@ check: test-program
 test-program: test/test-program.c libtoxcore-hs.so Makefile
 	$(CC) $< $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
 
-libtoxcore-hs.so: src/hsbracket.c Makefile libtoxcore-hs.ver $(SOURCES) Makefile
+libtoxcore-hs.so: src/hsbracket.c Makefile libtoxcore-hs.ld $(SOURCES) Makefile
 	$(GHC) $(PACKAGE_DB) 		\
 		-O2 -shared -fPIC	\
 		-dynamic		\
@@ -42,7 +42,7 @@ libtoxcore-hs.so: src/hsbracket.c Makefile libtoxcore-hs.ver $(SOURCES) Makefile
 		$(filter %.hs,$^)	\
 		-lHSrts-ghc$(GHC_VERSION)
 
-libtoxcore-hs.ver: $(SOURCES) Makefile
+libtoxcore-hs.ld: $(SOURCES) Makefile
 	@echo "Generating $@"
 	@echo '{'		>  $@
 	@echo '  global:'	>> $@

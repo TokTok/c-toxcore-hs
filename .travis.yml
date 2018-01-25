@@ -3,42 +3,38 @@ language: generic
 addons:
   apt:
     sources:
-      - hvr-ghc
+    - hvr-ghc
     packages:
-      - alex-3.1.7
-      - happy-1.19.5
-      - cabal-install-1.18
-      - ghc-7.8.4
-      # For debugging:
-      - gdb
-      - valgrind
+    - alex-3.1.7
+    - happy-1.19.5
+    - cabal-install-1.18
+    - ghc-7.8.4
+    # For debugging:
+    - gdb
+    - valgrind
 
 cache:
   directories:
-    - $HOME/.cabal
-    - $HOME/.ghc
+  - $HOME/.cabal
+  - $HOME/.ghc
 
 env: CABALVER=1.18 GHCVER=7.8.4
 
 install:
-  - export PATH=$HOME/.cabal/bin:/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:/opt/alex/3.1.7/bin:/opt/happy/1.19.5/bin:$PATH
-  - cabal update
-  # Where to find libraries.
-  - export LD_LIBRARY_PATH=$HOME/.ghc/usr/lib
-  - export CPPFLAGS=-I$HOME/.ghc/usr/include
-  - export LDFLAGS=-L$HOME/.ghc/usr/lib
-  # c-sodium
-  - >
-      [ -f $HOME/.ghc/usr/lib/libsodium.a ] || {
-        git clone --depth=1 --branch=stable https://github.com/jedisct1/libsodium;
-        (cd libsodium && ./configure --prefix=$HOME/.ghc/usr && make install -j$(nproc))
-      }
-  # hs-toxcore
-  - cabal install hstox --extra-include-dirs=$HOME/.ghc/usr/include --extra-lib-dirs=$HOME/.ghc/usr/lib
+- export PATH=$HOME/.cabal/bin:/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:/opt/alex/3.1.7/bin:/opt/happy/1.19.5/bin:$PATH
+- cabal update
+# Where to find libraries.
+- export LD_LIBRARY_PATH=$HOME/.ghc/usr/lib
+- export CPPFLAGS=-I$HOME/.ghc/usr/include
+- export LDFLAGS=-L$HOME/.ghc/usr/lib
+# c-sodium
+- >
+    [ -f $HOME/.ghc/usr/lib/libsodium.a ] || {
+      git clone --depth=1 --branch=stable https://github.com/jedisct1/libsodium;
+      (cd libsodium && ./configure --prefix=$HOME/.ghc/usr && make install -j$(nproc))
+    }
+# hs-toxcore
+- cabal install hstox --extra-include-dirs=$HOME/.ghc/usr/include --extra-lib-dirs=$HOME/.ghc/usr/lib
 
 script:
-  - make
-
-branches:
-  only:
-    - master
+- make
