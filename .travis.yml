@@ -25,6 +25,7 @@ install:
   - export PATH=$HOME/.cabal/bin:/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:/opt/alex/3.1.7/bin:/opt/happy/1.19.5/bin:$PATH
   - cabal update
   # Where to find libraries.
+  - export PKG_CONFIG_PATH=$HOME/.ghc/usr/lib/pkgconfig
   - export LD_LIBRARY_PATH=$HOME/.ghc/usr/lib
   - export CPPFLAGS=-I$HOME/.ghc/usr/include
   - export LDFLAGS=-L$HOME/.ghc/usr/lib
