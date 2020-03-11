@@ -1,3 +1,38 @@
+load("@ai_formation_hazel//tools:mangling.bzl", "hazel_library")
+load("@rules_haskell//haskell:defs.bzl", "haskell_library")
 load("//tools/project:build_defs.bzl", "project")
 
 project()
+
+cc_library(
+    name = "hsbracket",
+    srcs = ["src/hsbracket.c"],
+    deps = [hazel_library("rts")],
+    alwayslink = True,
+)
+
+haskell_library(
+    name = "c-toxcore-hs",
+    srcs = ["src/Network/Tox/CExport/CryptoCore.hs"],
+    src_strip_prefix = "src",
+    deps = [
+        ":hsbracket",
+        "//hs-toxcore",
+        hazel_library("base"),
+        hazel_library("bytestring"),
+        hazel_library("random"),
+        hazel_library("saltine"),
+    ],
+)
+
+cc_test(
+    name = "test",
+    size = "small",
+    srcs = [
+        "test/crypto_core.h",
+        "test/test-program.c",
+    ],
+    deps = [
+        ":c-toxcore-hs",
+    ],
+)
