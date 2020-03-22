@@ -6,7 +6,7 @@ os: linux
 
 before_install:
   - cd ..
-  - git clone --depth=1 --branch=upgrade-bazel https://github.com/iphydf/toktok-stack
+  - git clone --depth=1 https://github.com/TokTok/toktok-stack
   - (cd toktok-stack && git submodule update --jobs=8 --init --depth=5 --recursive)
   - rm -rf toktok-stack/c-toxcore-hs
   - mv c-toxcore-hs toktok-stack/
