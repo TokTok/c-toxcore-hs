@@ -13,13 +13,8 @@ before_install:
   - cd toktok-stack/
 
 install:
-  - wget https://github.com/bazelbuild/bazel/releases/download/2.2.0/bazel-2.2.0-installer-linux-x86_64.sh
-  - chmod +x bazel-2.2.0-installer-linux-x86_64.sh
-  - ./bazel-2.2.0-installer-linux-x86_64.sh --user
-  - echo 'build --jobs=4 --curses=no --verbose_failures' > $HOME/.bazelrc
-  - echo 'build --config=linux' >> $HOME/.bazelrc
-  - echo "build --config=$CC" >> $HOME/.bazelrc
-  - echo 'build --config=remote' >> $HOME/.bazelrc
+  - tools/setup-bazel
+  - tools/setup-ci
 
 script:
   - bazel test //c-toxcore-hs/...
