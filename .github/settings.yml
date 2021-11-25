@@ -1,5 +1,5 @@
 ---
-_extends: template
+_extends: .github
 
 repository:
   name: c-toxcore-hs
@@ -12,8 +12,8 @@ branches:
     protection:
       required_status_checks:
         contexts:
+          - cirrus-ci
           - Codacy/PR Quality Review
-          - Travis CI - Pull Request
-          - WIP
           - code-review/reviewable
           - license/cla
+          - WIP
