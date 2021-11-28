@@ -1,4 +1,5 @@
 {-# LANGUAGE NamedFieldPuns #-}
+{-# OPTIONS_GHC -Wno-unused-imports #-}
 module Network.Tox.CExport.CryptoCore where
 
 import           Control.Applicative            ((<$>))
@@ -37,19 +38,19 @@ new_symmetric_key target = do
 foreign export ccall handle_request :: CString -> IO ()
 
 handle_request :: CString -> IO ()
-handle_request = fail "handle_request"
+handle_request = error "handle_request"
 
 
 foreign export ccall create_request :: CString -> IO ()
 
 create_request :: CString -> IO ()
-create_request = fail "create_request"
+create_request = error "create_request"
 
 
 foreign export ccall decrypt_data :: CString -> IO ()
 
 decrypt_data :: CString -> IO ()
-decrypt_data = fail "decrypt_data"
+decrypt_data = error "decrypt_data"
 
 
 foreign export ccall decrypt_data_symmetric :: CString -> CString -> CString -> Word32 -> CString -> IO Int
@@ -70,7 +71,7 @@ decrypt_data_symmetric cCk cNonce cEncrypted cLen cPlain = do
 foreign export ccall encrypt_data :: CString -> IO ()
 
 encrypt_data :: CString -> IO ()
-encrypt_data = fail "encrypt_data"
+encrypt_data = error "encrypt_data"
 
 
 foreign export ccall encrypt_data_symmetric :: CString -> CString -> CString -> Word32 -> CString -> IO ()
@@ -99,7 +100,9 @@ encrypt_precompute cPk cSk cCk = do
 foreign export ccall random_nonce :: CString -> IO ()
 
 random_nonce :: CString -> IO ()
-random_nonce = new_nonce
+random_nonce target = do
+  nonce <- Sodium.encode <$> Nonce.newNonce
+  BS.useAsCStringLen nonce . uncurry . copyArray $ target
 
 
 foreign export ccall random_u32 :: IO Word32
@@ -117,19 +120,19 @@ random_u64 = randomIO
 foreign export ccall increment_nonce :: CString -> IO ()
 
 increment_nonce :: CString -> IO ()
-increment_nonce = fail "increment_nonce"
+increment_nonce = error "increment_nonce"
 
 
 foreign export ccall increment_nonce_number :: CString -> Word32 -> IO ()
 
 increment_nonce_number :: CString -> Word32 -> IO ()
-increment_nonce_number = fail "increment_nonce_number"
+increment_nonce_number = error "increment_nonce_number"
 
 
 foreign export ccall public_key_valid :: CString -> IO ()
 
 public_key_valid :: CString -> IO ()
-public_key_valid = fail "public_key_valid"
+public_key_valid = error "public_key_valid"
 
 
 foreign export ccall public_key_cmp :: CString -> CString -> IO CInt
