@@ -21,6 +21,7 @@ haskell_library(
         "//hs-toxcore",
         hazel_library("base"),
         hazel_library("bytestring"),
+        hazel_library("monad-validate"),
         hazel_library("random"),
         hazel_library("saltine"),
     ],

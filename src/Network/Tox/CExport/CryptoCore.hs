@@ -3,6 +3,7 @@
 module Network.Tox.CExport.CryptoCore where
 
 import           Control.Applicative            ((<$>))
+import           Control.Monad.Validate         (runValidate)
 import qualified Data.ByteString                as BS
 import           Data.Word                      (Word32, Word64)
 import           Foreign.C.String               (CString)
@@ -59,7 +60,7 @@ decrypt_data_symmetric :: CString -> CString -> CString -> Word32 -> CString -> 
 decrypt_data_symmetric cCk cNonce cEncrypted cLen cPlain = do
   Just ck <- Sodium.decode <$> BS.packCStringLen (cCk, 32)
   Just nonce <- Sodium.decode <$> BS.packCStringLen (cNonce, 24)
-  Just encrypted <- Box.cipherText <$> BS.packCStringLen (cEncrypted, fromIntegral cLen)
+  Right encrypted <- runValidate . Box.cipherText <$> BS.packCStringLen (cEncrypted, fromIntegral cLen)
   let plain = Box.unPlainText <$> Box.decrypt ck nonce encrypted
   case plain of
     Nothing -> return (-1)
