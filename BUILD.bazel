@@ -1,4 +1,3 @@
-load("@ai_formation_hazel//tools:mangling.bzl", "hazel_library")
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 load("@rules_haskell//haskell:defs.bzl", "haskell_library")
 load("//tools/project:build_defs.bzl", "project")
@@ -8,7 +7,7 @@ project()
 cc_library(
     name = "hsbracket",
     srcs = ["src/hsbracket.c"],
-    deps = [hazel_library("rts")],
+    deps = ["//third_party/haskell:rts"],
     alwayslink = True,
 )
 
@@ -19,11 +18,11 @@ haskell_library(
     deps = [
         ":hsbracket",
         "//hs-toxcore",
-        hazel_library("base"),
-        hazel_library("bytestring"),
-        hazel_library("monad-validate"),
-        hazel_library("random"),
-        hazel_library("saltine"),
+        "//third_party/haskell:base",
+        "//third_party/haskell:bytestring",
+        "//third_party/haskell:monad-validate",
+        "//third_party/haskell:random",
+        "//third_party/haskell:saltine",
     ],
 )
 
