@@ -15,6 +15,7 @@ haskell_library(
     name = "c-toxcore-hs",
     srcs = ["src/Network/Tox/CExport/CryptoCore.hs"],
     src_strip_prefix = "src",
+    visibility = ["//tools/haskell:__pkg__"],
     deps = [
         ":hsbracket",
         "//hs-toxcore",
